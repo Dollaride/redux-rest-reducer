@@ -1,11 +1,17 @@
+import { AsyncStorage } from 'react-native';
 const CONTENT_TYPE = 'application/json'
 
 export default function configureAPI(API_URL) {
-  function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
+  async function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
+	  const authToken = JSON.parse(await AsyncStorage.getItem('TOKEN'));
     const headers = {
       Accept: CONTENT_TYPE,
     }
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
+	  if (authToken && authToken !== 'null') {
+		  headers['Authorization'] = authToken
+	  }
+	  console.log("HEADERS", headers);
     return fetch(API_URL + endpoint, Object.assign({
       headers,
     }, options)).then(r => {

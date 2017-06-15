@@ -163,10 +163,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         var _ref4 = getState()[stateName].http.things[id] || {
           GET: { requested: false }
+          // If we already have an on-going request just wait for it to finish
         },
             requested = _ref4.GET.requested;
-        // If we already have an on-going request just wait for it to finish
-
 
         if (requested) {
           var queuePromise = new Promise(function (resolve) {
