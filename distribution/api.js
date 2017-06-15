@@ -13,7 +13,7 @@ var _reactNative = require('react-native');
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var CONTENT_TYPE = 'application/json';
-
+var TOKEN = "TOKEN";
 function configureAPI(API_URL) {
   var fetchFromAPI = function () {
     var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(endpoint) {
@@ -32,7 +32,7 @@ function configureAPI(API_URL) {
             case 0:
               _context.t0 = JSON;
               _context.next = 3;
-              return _reactNative.AsyncStorage.getItem('TOKEN');
+              return _reactNative.AsyncStorage.getItem(TOKEN);
 
             case 3:
               _context.t1 = _context.sent;
