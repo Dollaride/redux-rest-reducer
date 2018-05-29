@@ -1,23 +1,18 @@
-import { AsyncStorage } from 'react-native';
 const CONTENT_TYPE = 'application/json'
-const TOKEN = "TOKEN";
-export default function configureAPI(API_URL) {
-  async function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
-	  const authToken = JSON.parse(await AsyncStorage.getItem(TOKEN));
-    const headers = {
+
+export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc = () => {} ) {
+  function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
+    const headers = headerFunc({
       Accept: CONTENT_TYPE,
-    }
+    })
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
-	  if (authToken && authToken !== 'null') {
-		  headers['Authorization'] = authToken
-	  }
-	  console.log("HEADERS", headers);
     return fetch(API_URL + endpoint, Object.assign({
       headers,
     }, options)).then(r => {
       if (!r.ok) {
         const e = new Error(r.status)
         e.json = json
+        errorFunc(e)
         throw e
       }
       return json ? r.json().then(jsonVal => jsonVal) : r
@@ -42,6 +37,13 @@ export default function configureAPI(API_URL) {
     return fetchFromAPI(endpoint,
       {
         options: Object.assign({ method: 'put' }, options),
+        json: false,
+      })
+  }
+  function patchToAPI(endpoint, options = {}) {
+    return fetchFromAPI(endpoint,
+      {
+        options: Object.assign({ method: 'patch' }, options),
         json: false,
       })
   }
@@ -75,6 +77,9 @@ export default function configureAPI(API_URL) {
       PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
         body: JSON.stringify({ ...template, ...item }),
       }),
+      PATCH: (id, item) => patchToAPI(`${endpoint}/${id}`, {
+        body: JSON.stringify({ ...template, ...item }),
+      }),
     }
   }
 
@@ -83,6 +88,7 @@ export default function configureAPI(API_URL) {
     postToAPI,
     postMultipartToAPI,
     putToAPI,
+    patchToAPI,
     deleteFromAPI,
     postImage,
     genericApiFactory,
