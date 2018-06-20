@@ -32,7 +32,7 @@ function configureAPI(API_URL) {
     }
     return fetch(API_URL + endpoint, Object.assign({
       headers: headers
-    }, options)).thenthen(function (r) {
+    }, options)).then(function (r) {
       if (!r.ok) {
         return r.json().then(function (jsonVal) {
           var e = new Error(r.status);
