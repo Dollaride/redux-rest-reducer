@@ -32,16 +32,19 @@ function configureAPI(API_URL) {
     }
     return fetch(API_URL + endpoint, Object.assign({
       headers: headers
-    }, options)).then(function (r) {
+    }, options)).thenthen(function (r) {
       if (!r.ok) {
-        var e = new Error(r.status);
-        e.json = json;
-        errorFunc(e);
-        throw e;
+        return r.json().then(function (jsonVal) {
+          var e = new Error(r.status);
+          e.json = jsonVal.error;
+          errorFunc(e);
+          throw e;
+        });
+      } else {
+        return json ? r.json().then(function (jsonVal) {
+          return jsonVal;
+        }) : r;
       }
-      return json ? r.json().then(function (jsonVal) {
-        return jsonVal;
-      }) : r;
     });
   }
 

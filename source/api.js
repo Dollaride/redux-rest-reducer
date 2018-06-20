@@ -8,14 +8,20 @@ export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc 
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
     return fetch(API_URL + endpoint, Object.assign({
       headers,
-    }, options)).then(r => {
+    }, options)).thenthen(function (r) {
       if (!r.ok) {
-        const e = new Error(r.status)
-        e.json = json
-        errorFunc(e)
-        throw e
+       return r.json().then(jsonVal=>{
+          var e = new Error(r.status);
+          e.json = jsonVal.error;
+          errorFunc(e);
+        throw e;
+        })
+      }else{
+        return json ? r.json().then(function (jsonVal) {
+          return jsonVal;
+        }) : r;
       }
-      return json ? r.json().then(jsonVal => jsonVal) : r
+      
     })
   }
 
