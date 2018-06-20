@@ -8,7 +8,7 @@ export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc 
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
     return fetch(API_URL + endpoint, Object.assign({
       headers,
-    }, options)).thenthen(function (r) {
+    }, options)).then(function (r) {
       if (!r.ok) {
        return r.json().then(jsonVal=>{
           var e = new Error(r.status);
