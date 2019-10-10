@@ -42,7 +42,9 @@ function configureAPI(API_URL) {
         });
       } else {
         return json ? r.json().then(function (jsonVal) {
-          return jsonVal;
+          return _extends({
+            statusCode: r.status
+          }, jsonVal);
         }) : r;
       }
     });

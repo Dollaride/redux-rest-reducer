@@ -18,10 +18,13 @@ export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc 
         })
       }else{
         return json ? r.json().then(function (jsonVal) {
-          return jsonVal;
+          return {
+            statusCode: r.status,
+            ...jsonVal
+          };
         }) : r;
       }
-      
+
     })
   }
 
