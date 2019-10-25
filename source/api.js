@@ -20,7 +20,7 @@ export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc 
         return json ? r.json().then(function (jsonVal) {
           return {
             statusCode: r.status,
-            ...jsonVal
+            data:jsonVal
           };
         }) : r;
       }
