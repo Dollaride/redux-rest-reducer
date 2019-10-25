@@ -18,9 +18,15 @@ export default function configureAPI(API_URL,  headerFunc = (h) => h, errorFunc 
         })
       }else{
         return json ? r.json().then(function (jsonVal) {
+          let finalVal ;
+          if(Array.isArray(jsonVal)) {
+            finalVal= {data: jsonVal}
+          }else {
+            finalVal = jsonVal
+          }
           return {
             statusCode: r.status,
-            data:jsonVal
+            ...finalVal
           };
         }) : r;
       }

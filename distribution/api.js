@@ -42,10 +42,15 @@ function configureAPI(API_URL) {
         });
       } else {
         return json ? r.json().then(function (jsonVal) {
-          return {
-            statusCode: r.status,
-            data: jsonVal
-          };
+          var finalVal = void 0;
+          if (Array.isArray(jsonVal)) {
+            finalVal = { data: jsonVal };
+          } else {
+            finalVal = jsonVal;
+          }
+          return _extends({
+            statusCode: r.status
+          }, finalVal);
         }) : r;
       }
     });
